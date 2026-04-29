@@ -28,5 +28,52 @@ namespace DIY_System
         {
 
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Register register = new Register();
+            register.Show();
+            this.Hide();
+        }
+
+        private bool logIn(object sender, EventArgs e)
+        {
+            sqlconnection = new SqlConnection(cs);
+            sqlconnection.Open();
+            query = "SELECT * FROM Users WHERE UserName='" + txtUsername.Text + "' AND Password='" + txtPassword.Text + "'";
+            sqlcommand = new SqlCommand(query, sqlconnection);
+            sqladapter = new SqlDataAdapter(sqlcommand);
+            DataTable dataTable = new DataTable();
+            sqladapter.Fill(dataTable);
+            if (dataTable.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UserForm uf= new UserForm();
+
+            if (logIn(sender, e))
+            {
+                MessageBox.Show("Login successful!");
+                uf.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Invalid username or password.");
+            }
+        }
     }
 }
