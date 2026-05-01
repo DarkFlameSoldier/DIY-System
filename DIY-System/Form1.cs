@@ -41,32 +41,44 @@ namespace DIY_System
             this.Hide();
         }
 
-        private bool logIn(object sender, EventArgs e)
+        private int VerifyLogIn()
         {
-            sqlconnection = new SqlConnection(cs);
-            sqlconnection.Open();
-            query = "SELECT * FROM Users WHERE UserName='" + txtUsername.Text + "' AND Password='" + txtPassword.Text + "'";
-            sqlcommand = new SqlCommand(query, sqlconnection);
-            sqladapter = new SqlDataAdapter(sqlcommand);
-            DataTable dataTable = new DataTable();
-            sqladapter.Fill(dataTable);
-            if (dataTable.Rows.Count > 0)
+            int fetchedUserId = 0;
+
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                return true;
+                string query = "SELECT UserId FROM Users WHERE Username=@Username AND Password=@Password";
+
+                using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
+                {
+                    sqlcommand.Parameters.AddWithValue("@Username", txtUsername.Text);
+                    sqlcommand.Parameters.AddWithValue("@Password", txtPassword.Text);
+
+                    sqlconnection.Open();
+
+                    object result = sqlcommand.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        fetchedUserId = Convert.ToInt32(result);
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return fetchedUserId;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            UserForm uf= new UserForm();
+            int loggedInUserId = VerifyLogIn();
 
-            if (logIn(sender, e))
-            {
+            if (loggedInUserId > 0)
+            { 
+                CurrentUser.UserID = loggedInUserId;
+
                 MessageBox.Show("Login successful!");
+
+                UserForm uf = new UserForm();
                 uf.Show();
                 this.Hide();
             }
