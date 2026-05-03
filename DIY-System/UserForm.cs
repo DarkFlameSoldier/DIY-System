@@ -101,5 +101,62 @@ namespace DIY_System
         {
             DisplayData();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            // 1. Check if they actually clicked on a row in the grid
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a project from the list to delete.");
+                return;
+            }
+
+            // 2. Extract the ProjectId from the hidden column in the selected row
+            // (Make sure "ProjectId" exactly matches the column name from your SQL query!)
+            int selectedProjectId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["ProjectId"].Value);
+
+            // 3. Safety Check: Ask them if they are absolutely sure!
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to permanently delete this project?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                using (SqlConnection sqlconnection = new SqlConnection(cs))
+                {
+                    sqlconnection.Open();
+
+                    // ==========================================
+                    // STEP 1: Delete the linked materials first!
+                    // ==========================================
+                    string deleteMaterialsQuery = "DELETE FROM ProjectMaterials WHERE ProjectId = @ProjId";
+                    using (SqlCommand cmdMaterials = new SqlCommand(deleteMaterialsQuery, sqlconnection))
+                    {
+                        cmdMaterials.Parameters.AddWithValue("@ProjId", selectedProjectId);
+                        cmdMaterials.ExecuteNonQuery(); // This safely un-links all the materials
+                    }
+
+                    // ==========================================
+                    // STEP 2: Now delete the actual project!
+                    // ==========================================
+                    string deleteProjectQuery = "DELETE FROM Projects WHERE ProjectId = @ProjId AND UserId = @UserId";
+                    using (SqlCommand cmdProject = new SqlCommand(deleteProjectQuery, sqlconnection))
+                    {
+                        cmdProject.Parameters.AddWithValue("@ProjId", selectedProjectId);
+                        cmdProject.Parameters.AddWithValue("@UserId", CurrentUser.UserID);
+
+                        int rowsAffected = cmdProject.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Project successfully deleted!");
+                            DisplayData(); // Refresh the grid
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: You do not have permission to delete this project.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
