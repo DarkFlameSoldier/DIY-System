@@ -75,9 +75,9 @@
             // button1
             // 
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(342, 289);
+            this.button1.Location = new System.Drawing.Point(319, 246);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 29);
+            this.button1.Size = new System.Drawing.Size(130, 48);
             this.button1.TabIndex = 4;
             this.button1.Text = "Log In";
             this.button1.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             // button2
             // 
             this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button2.Location = new System.Drawing.Point(342, 343);
+            this.button2.Location = new System.Drawing.Point(319, 314);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 29);
+            this.button2.Size = new System.Drawing.Size(130, 48);
             this.button2.TabIndex = 5;
             this.button2.Text = "Register";
             this.button2.UseVisualStyleBackColor = true;

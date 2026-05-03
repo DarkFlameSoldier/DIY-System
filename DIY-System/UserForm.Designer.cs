@@ -30,6 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ProjectId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.instructionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.photoPathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UserId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CategoryId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.projectsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dIYDataSet = new DIY_System.DIYDataSet();
             this.projectsTableAdapter = new DIY_System.DIYDataSetTableAdapters.ProjectsTableAdapter();
@@ -38,13 +45,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.ProjectId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.instructionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.photoPathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UserId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CategoryId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dIYDataSet)).BeginInit();
@@ -63,76 +63,13 @@
             this.UserId,
             this.CategoryId});
             this.dataGridView1.DataSource = this.projectsBindingSource;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 190);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 171);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(1139, 248);
+            this.dataGridView1.Size = new System.Drawing.Size(1139, 352);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // projectsBindingSource
-            // 
-            this.projectsBindingSource.DataMember = "Projects";
-            this.projectsBindingSource.DataSource = this.dIYDataSet;
-            // 
-            // dIYDataSet
-            // 
-            this.dIYDataSet.DataSetName = "DIYDataSet";
-            this.dIYDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // projectsTableAdapter
-            // 
-            this.projectsTableAdapter.ClearBeforeFill = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(487, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(155, 34);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Create Project";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(165, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(155, 34);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "My Projects";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(326, 12);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(155, 34);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "All projects";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(648, 12);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(155, 34);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Delete";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(809, 12);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(155, 34);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Edit";
-            this.button5.UseVisualStyleBackColor = true;
             // 
             // ProjectId
             // 
@@ -191,11 +128,75 @@
             this.CategoryId.Name = "CategoryId";
             this.CategoryId.Width = 125;
             // 
+            // projectsBindingSource
+            // 
+            this.projectsBindingSource.DataMember = "Projects";
+            this.projectsBindingSource.DataSource = this.dIYDataSet;
+            // 
+            // dIYDataSet
+            // 
+            this.dIYDataSet.DataSetName = "DIYDataSet";
+            this.dIYDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // projectsTableAdapter
+            // 
+            this.projectsTableAdapter.ClearBeforeFill = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(505, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(155, 34);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Create Project";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(183, 12);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(155, 34);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "My Projects";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(344, 12);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(155, 34);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "All projects";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(666, 12);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(155, 34);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "Delete";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(827, 12);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(155, 34);
+            this.button5.TabIndex = 5;
+            this.button5.Text = "View Project";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1163, 450);
+            this.ClientSize = new System.Drawing.Size(1163, 535);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -225,7 +226,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProjectId;
         private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
@@ -233,5 +233,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn photoPathDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn UserId;
         private System.Windows.Forms.DataGridViewTextBoxColumn CategoryId;
+        private System.Windows.Forms.Button button5;
     }
 }

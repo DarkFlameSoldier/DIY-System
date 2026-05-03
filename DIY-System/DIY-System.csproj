@@ -93,6 +93,12 @@
     <Compile Include="UserForm.Designer.cs">
       <DependentUpon>UserForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewProject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewProject.Designer.cs">
+      <DependentUpon>ViewProject.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CreateProject.resx">
       <DependentUpon>CreateProject.cs</DependentUpon>
     </EmbeddedResource>
@@ -113,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewProject.resx">
+      <DependentUpon>ViewProject.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="DIYDataSet.xsc">
       <DependentUpon>DIYDataSet.xsd</DependentUpon>

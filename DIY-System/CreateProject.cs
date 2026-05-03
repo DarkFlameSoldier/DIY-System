@@ -40,23 +40,8 @@ namespace DIY_System
             }
         }
 
-        private int GetSelectedCategoryId()
-        {
-            // Check if something is actually selected to prevent crashes
-            if (comboBox1.SelectedValue != null)
-            {
-                // SelectedValue returns an 'object', so we must convert it to an integer
-                return Convert.ToInt32(comboBox1.SelectedValue);
-            }
-            else
-            {
-                return 0; // Or handle the error however you prefer
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            // 1. Basic validation
             if (string.IsNullOrWhiteSpace(txtTitle.Text) || string.IsNullOrWhiteSpace(txtInstructions.Text))
             {
                 MessageBox.Show("Please fill in at least the Title and Instructions.");
@@ -123,7 +108,6 @@ namespace DIY_System
         {
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                // We need both the ID and the Name
                 string query = "SELECT CategoryId, Name FROM Categories";
 
                 using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
@@ -132,13 +116,10 @@ namespace DIY_System
                     DataTable dtCategories = new DataTable();
                     adapter.Fill(dtCategories);
 
-                    // 1. Give the data to the ComboBox
                     comboBox1.DataSource = dtCategories;
 
-                    // 2. Tell it what column to SHOW to the user
                     comboBox1.DisplayMember = "Name";
 
-                    // 3. Tell it what column to HIDE as the actual value
                     comboBox1.ValueMember = "CategoryId";
                 }
             }
