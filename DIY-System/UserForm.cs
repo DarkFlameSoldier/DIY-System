@@ -232,5 +232,49 @@ namespace DIY_System
             AdminForm adminForm = new AdminForm();
             adminForm.ShowDialog();
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow == null) return;
+
+            int selectedProjectId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["ProjectId"].Value);
+
+            bool isAuthorized = false;
+
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string checkQuery = "SELECT UserId FROM Projects WHERE ProjectId = @ProjId";
+
+                using (SqlCommand cmd = new SqlCommand(checkQuery, sqlconnection))
+                {
+                    cmd.Parameters.AddWithValue("@ProjId", selectedProjectId);
+                    sqlconnection.Open();
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        int projectOwnerId = Convert.ToInt32(result);
+
+                        if (projectOwnerId == CurrentUser.UserID || CurrentUser.IsAdmin)
+                        {
+                            isAuthorized = true;
+                        }
+                    }
+                }
+            }
+
+            if (isAuthorized)
+            {
+                EditProject editForm = new EditProject(selectedProjectId);
+                editForm.ShowDialog();
+
+                DisplayData();
+            }
+            else
+            {
+                MessageBox.Show("Access Denied: You can only edit projects that you created.", "Security Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
