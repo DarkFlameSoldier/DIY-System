@@ -19,7 +19,7 @@ namespace DIY_System
         DataView gridDataSource;
         SqlConnection sqlconnection;
         SqlCommand sqlcommand;
-        string Query;
+        string query;
         DataTable datatable;
         SqlDataAdapter sqladpter;
         int ID = 0;
@@ -28,7 +28,7 @@ namespace DIY_System
         private void DisplayData()
         {
             sqlconnection = new SqlConnection(cs);
-            Query = @"SELECT 
+            query = @"SELECT 
                 p.ProjectId, 
                 p.Title, 
                 p.Description, 
@@ -39,7 +39,7 @@ namespace DIY_System
                 FROM Projects p
                 INNER JOIN Users u ON p.UserId = u.UserId
                 INNER JOIN Categories c ON p.CategoryId = c.CategoryId";
-            sqlcommand = new SqlCommand(Query, sqlconnection);
+            sqlcommand = new SqlCommand(query, sqlconnection);
             sqladpter = new SqlDataAdapter();
             datatable = new DataTable();
 
@@ -56,6 +56,8 @@ namespace DIY_System
 
         private void UserForm_Load(object sender, EventArgs e)
         {
+            button7.Visible = CurrentUser.IsAdmin;
+
             DisplayData();
             LoadCategories();
         }
@@ -75,7 +77,7 @@ namespace DIY_System
         private void button2_Click(object sender, EventArgs e)
         {
             sqlconnection = new SqlConnection(cs);
-            Query = @"SELECT 
+            query = @"SELECT 
                 p.ProjectId, 
                 p.Title, 
                 p.Description, 
@@ -87,7 +89,7 @@ namespace DIY_System
                 INNER JOIN Users u ON p.UserId = u.UserId
                 INNER JOIN Categories c ON p.CategoryId = c.CategoryId
                 WHERE p.UserId = @LoggedInUser";
-            sqlcommand = new SqlCommand(Query, sqlconnection);
+            sqlcommand = new SqlCommand(query, sqlconnection);
             sqlcommand.Parameters.AddWithValue("@LoggedInUser", CurrentUser.UserID);
             sqladpter = new SqlDataAdapter();
             datatable = new DataTable();
@@ -223,6 +225,12 @@ namespace DIY_System
                     }
                 }
             }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            AdminForm adminForm = new AdminForm();
+            adminForm.ShowDialog();
         }
     }
 }
