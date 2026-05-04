@@ -171,7 +171,7 @@ namespace DIY_System
         {
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                string query = "SELECT CategoryId, Name FROM Categories";
+                query = "SELECT CategoryId, Name FROM Categories";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, sqlconnection);
                 DataTable categoriesTable = new DataTable();
                 adapter.Fill(categoriesTable);
@@ -193,7 +193,7 @@ namespace DIY_System
 
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                string query = @"SELECT 
+                query = @"SELECT 
                             p.ProjectId, 
                             p.Title, 
                             p.Description, 

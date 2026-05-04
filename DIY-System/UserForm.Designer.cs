@@ -181,7 +181,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(155, 34);
             this.button4.TabIndex = 4;
-            this.button4.Text = "Delete";
+            this.button4.Text = "Delete Project";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
