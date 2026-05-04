@@ -57,6 +57,7 @@ namespace DIY_System
         private void UserForm_Load(object sender, EventArgs e)
         {
             DisplayData();
+            LoadCategories();
         }
 
         private void UserForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -162,6 +163,66 @@ namespace DIY_System
             ViewProject viewForm = new ViewProject(selectedProjectId);
 
             viewForm.ShowDialog();
+        }
+
+        private void LoadCategories()
+        {
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string query = "SELECT CategoryId, Name FROM Categories";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, sqlconnection);
+                DataTable categoriesTable = new DataTable();
+                adapter.Fill(categoriesTable);
+                comboBox1.DisplayMember = "Name";
+                comboBox1.ValueMember = "CategoryId";
+                comboBox1.DataSource = categoriesTable;
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedValue == null)
+            {
+                MessageBox.Show("Please select a category to search for.");
+                return;
+            }
+
+            int selectedSearchId = Convert.ToInt32(comboBox1.SelectedValue);
+
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string query = @"SELECT 
+                            p.ProjectId, 
+                            p.Title, 
+                            p.Description, 
+                            p.Instructions, 
+                            p.PhotoPath, 
+                            u.Username AS [Author], 
+                            c.Name AS [Category]
+                          FROM Projects p
+                          INNER JOIN Users u ON p.UserId = u.UserId
+                          INNER JOIN Categories c ON p.CategoryId = c.CategoryId
+                          WHERE p.CategoryId = @CatId";
+
+                using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
+                {
+                    sqlcommand.Parameters.AddWithValue("@CatId", selectedSearchId);
+
+                    SqlDataAdapter sqladapter = new SqlDataAdapter(sqlcommand);
+                    DataTable datatable = new DataTable();
+                    sqladapter.Fill(datatable);
+
+                    if (datatable.Rows.Count == 0)
+                    {
+                        dataGridView1.DataSource = null;
+                        MessageBox.Show("No projects found in this category yet!", "No Results");
+                    }
+                    else
+                    {
+                        dataGridView1.DataSource = datatable;
+                    }
+                }
+            }
         }
     }
 }
