@@ -193,5 +193,27 @@ namespace DIY_System
         { 
 
         }
+
+        private void LoadExperienceLevels()
+        {
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string query = "SELECT ExperienceLevelId, LevelName FROM ExperienceLevels";
+                using (SqlCommand cmd = new SqlCommand(query, sqlconnection))
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dtLevels = new DataTable();
+                    adapter.Fill(dtLevels);
+
+                    comboBox1.DataSource = dtLevels;
+                    comboBox1.DisplayMember = "LevelName";
+                    comboBox1.ValueMember = "ExperienceLevelId";
+                }
+            }
+        }
+        private void Register_Load(object sender, EventArgs e)
+        {
+            LoadExperienceLevels();
+        }
     }
 }

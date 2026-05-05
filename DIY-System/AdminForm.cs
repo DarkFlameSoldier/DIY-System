@@ -113,7 +113,16 @@ namespace DIY_System
 
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                string query = "SELECT UserId, Username, Email, ExperienceLevel, Password FROM Users WHERE RoleId = 1";
+                string query = @"
+            SELECT 
+                u.UserId, 
+                u.Username, 
+                u.Email, 
+                u.Password,
+                e.LevelName AS [Experience Level]
+            FROM Users u
+            LEFT JOIN ExperienceLevels e ON u.ExperienceLevelId = e.ExperienceLevelId
+            WHERE u.RoleId = 1";
 
                 using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
                 {

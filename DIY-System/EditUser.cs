@@ -47,24 +47,24 @@ namespace DIY_System
 
                 if (string.IsNullOrWhiteSpace(textBox2.Text))
                 {
-                    cmd.CommandText = "UPDATE Users SET Username = @User, Email = @Email, ExperienceLevel = @Exp WHERE UserId = @UserId";
+                    cmd.CommandText = "UPDATE Users SET Username = @User, Email = @Email, ExperienceLevelId = @ExpId WHERE UserId = @UserId";
                 }
                 else
                 {
-                    cmd.CommandText = "UPDATE Users SET Username = @User, Password = @Pass, Email = @Email, ExperienceLevel = @Exp WHERE UserId = @UserId";
+                    cmd.CommandText = "UPDATE Users SET Username = @User, Password = @Pass, Email = @Email, ExperienceLevelId = @ExpId WHERE UserId = @UserId";
                     cmd.Parameters.AddWithValue("@Pass", textBox2.Text);
                 }
 
                 cmd.Parameters.AddWithValue("@User", textBox1.Text);
                 cmd.Parameters.AddWithValue("@Email", textBox3.Text);
 
-                if (comboBox1.SelectedItem != null)
+                if (comboBox1.SelectedValue != null)
                 {
-                    cmd.Parameters.AddWithValue("@Exp", comboBox1.SelectedItem.ToString());
+                    cmd.Parameters.AddWithValue("@ExpId", Convert.ToInt32(comboBox1.SelectedValue));
                 }
                 else
                 {
-                    cmd.Parameters.AddWithValue("@Exp", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ExpId", DBNull.Value);
                 }
 
                 cmd.Parameters.AddWithValue("@UserId", _userIdEdit);
@@ -84,16 +84,27 @@ namespace DIY_System
 
         private void LoadExperienceLevels()
         {
-            comboBox1.Items.Add("New");
-            comboBox1.Items.Add("Advanced");
-            comboBox1.Items.Add("Experienced");
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string query = "SELECT ExperienceLevelId, LevelName FROM ExperienceLevels";
+                using (SqlCommand cmd = new SqlCommand(query, sqlconnection))
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dtLevels = new DataTable();
+                    adapter.Fill(dtLevels);
+
+                    comboBox1.DataSource = dtLevels;
+                    comboBox1.DisplayMember = "LevelName";
+                    comboBox1.ValueMember = "ExperienceLevelId";
+                }
+            }
         }
 
         private void LoadExistingUserData()
         {
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                string query = "SELECT Username, Email, ExperienceLevel, Password FROM Users WHERE UserId = @UserId";
+                string query = "SELECT Username, Email, ExperienceLevelId FROM Users WHERE UserId = @UserId";
 
                 using (SqlCommand cmd = new SqlCommand(query, sqlconnection))
                 {
@@ -105,10 +116,12 @@ namespace DIY_System
                         if (reader.Read())
                         {
                             textBox1.Text = reader["Username"].ToString();
-                            textBox2.Text = reader["Password"].ToString();
                             textBox3.Text = reader["Email"].ToString();
 
-                            comboBox1.SelectedItem = reader["ExperienceLevel"].ToString();
+                            if (reader["ExperienceLevelId"] != DBNull.Value)
+                            {
+                                comboBox1.SelectedValue = reader["ExperienceLevelId"];
+                            }
                         }
                     }
                 }
