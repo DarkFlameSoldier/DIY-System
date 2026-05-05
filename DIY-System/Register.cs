@@ -147,29 +147,54 @@ namespace DIY_System
                     return;
                 }
 
-                sqlconnection = new SqlConnection(cs);
-                sqlconnection.Open();
-                query = "Insert INTO Users (Username,Email,ExperienceLevel,RoleId,Password) VALUES(@UsName,@Email,@Ex,@Role,@Pass)";
-                sqlcommand = new SqlCommand(query, sqlconnection);
-                sqlcommand.Parameters.AddWithValue("@UsName", textBox1.Text);
-                sqlcommand.Parameters.AddWithValue("@Email", textBox3.Text);
-                sqlcommand.Parameters.AddWithValue("@Pass", textBox4.Text);
-                sqlcommand.Parameters.AddWithValue("@Ex", comboBox1.SelectedItem.ToString());
-                sqlcommand.Parameters.AddWithValue("@Role", 1);
-                sqlcommand.ExecuteNonQuery();
-                sqlconnection.Close();
-                ClearData();
-                MessageBox.Show("Inserted successfully!");
-
-                if (CurrentUser.IsAdmin)
+                if (comboBox1.SelectedValue == null)
                 {
-                    this.Close();
+                    MessageBox.Show("Please select an Experience Level.");
+                    return;
                 }
-                else
+
+                using (SqlConnection sqlconnection = new SqlConnection(cs))
                 {
-                    Form1 form1 = new Form1();
-                    form1.Show();
-                    this.Close();
+                    sqlconnection.Open();
+
+                    string checkUser = "SELECT COUNT(*) FROM Users WHERE Username = @User";
+                    using (SqlCommand cmdCheck = new SqlCommand(checkUser, sqlconnection))
+                    {
+                        cmdCheck.Parameters.AddWithValue("@User", textBox1.Text);
+                        int userExists = Convert.ToInt32(cmdCheck.ExecuteScalar());
+
+                        if (userExists > 0)
+                        {
+                            MessageBox.Show("That username is already taken. Please choose another.");
+                            return;
+                        }
+                    }
+
+                    string insertQuery = @"INSERT INTO Users (Username, Password, RoleId, Email, ExperienceLevelId) 
+                               VALUES (@User, @Pass, 1, @Email, @ExpId)";
+
+                    using (SqlCommand cmdInsert = new SqlCommand(insertQuery, sqlconnection))
+                    {
+                        cmdInsert.Parameters.AddWithValue("@User", textBox1.Text);
+                        cmdInsert.Parameters.AddWithValue("@Pass", textBox4.Text);
+                        cmdInsert.Parameters.AddWithValue("@Email", textBox3.Text);
+                        cmdInsert.Parameters.AddWithValue("@ExpId", Convert.ToInt32(comboBox1.SelectedValue));
+
+                        cmdInsert.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Account successfully created!");
+
+                    if (CurrentUser.IsAdmin)
+                    {
+                        this.Close();
+                    }
+                    else
+                    {
+                        Form1 login = new Form1();
+                        login.Show();
+                        this.Hide();
+                    }
                 }
 
             }

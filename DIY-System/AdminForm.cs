@@ -201,7 +201,18 @@ namespace DIY_System
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a project from the list to edit.");
+                return;
+            }
 
+            int selectedProjectId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["ProjectId"].Value);
+
+            EditProject editForm = new EditProject(selectedProjectId);
+            editForm.ShowDialog();
+
+            button1.PerformClick();
         }
 
         private void button7_Click(object sender, EventArgs e)
