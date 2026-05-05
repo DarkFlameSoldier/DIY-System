@@ -144,6 +144,18 @@ namespace DIY_System
                 sqlconnection.Close();
                 ClearData();
                 MessageBox.Show("Inserted successfully!");
+
+                if (CurrentUser.IsAdmin)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    Form1 form1 = new Form1();
+                    form1.Show();
+                    this.Close();
+                }
+
             }
             else
             {

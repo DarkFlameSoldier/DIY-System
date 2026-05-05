@@ -14,10 +14,7 @@ namespace DIY_System
 {
     public partial class CreateProject : Form
     {
-        SqlConnection sqlconnection;
-        SqlCommand sqlcommand;
         string query;
-        SqlDataAdapter sqladapter;
         string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Ivo\source\repos\DIY-System\DIY-System\DIY.mdf;Integrated Security=True";
 
         string selectedPhotoPath = "";

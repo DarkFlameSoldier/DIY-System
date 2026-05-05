@@ -110,7 +110,34 @@ namespace DIY_System
             button4.Visible = false;
             button5.Visible = false;
             button6.Visible = false;
+
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string query = "SELECT UserId, Username, Email, ExperienceLevel, Password FROM Users WHERE RoleId = 1";
+
+                using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
+                {
+                    SqlDataAdapter sqladapter = new SqlDataAdapter(sqlcommand);
+                    DataTable datatable = new DataTable();
+
+                    sqladapter.Fill(datatable);
+
+                    dataGridView1.DataSource = null;
+                    dataGridView1.Columns.Clear();
+
+                    if (datatable.Rows.Count > 0)
+                    {
+                        dataGridView1.DataSource = datatable;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No normal users found in the database.");
+                    }
+                }
+            }
         }
+
+        
 
         private void button10_Click(object sender, EventArgs e)
         {
@@ -166,6 +193,100 @@ namespace DIY_System
         private void button4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Register rg = new Register();
+
+            rg.ShowDialog();
+
+            button1.PerformClick();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a user from the list to delete.");
+                return;
+            }
+
+            int selectedUserId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["UserId"].Value);
+
+            if (selectedUserId == CurrentUser.UserID)
+            {
+                MessageBox.Show("Action Denied: You cannot delete your own admin account!", "Security Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (selectedUserId == 8)
+            {
+                MessageBox.Show("Action Denied: You cannot delete the system 'deletedUser' account!", "Security Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show(
+                "Are you sure you want to permanently delete this user? \n\nAny projects they created will be safely transferred to the 'deletedUser' placeholder account.",
+                "Confirm Deletion",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                using (SqlConnection sqlconnection = new SqlConnection(cs))
+                {
+                    sqlconnection.Open();
+
+                    string transferQuery = "UPDATE Projects SET UserId = 8 WHERE UserId = @TargetId";
+                    using (SqlCommand cmdTransfer = new SqlCommand(transferQuery, sqlconnection))
+                    {
+                        cmdTransfer.Parameters.AddWithValue("@TargetId", selectedUserId);
+
+                        cmdTransfer.ExecuteNonQuery();
+                    }
+
+                    string deleteUserQuery = "DELETE FROM Users WHERE UserId = @TargetId";
+                    using (SqlCommand cmdDelete = new SqlCommand(deleteUserQuery, sqlconnection))
+                    {
+                        cmdDelete.Parameters.AddWithValue("@TargetId", selectedUserId);
+                        int rowsAffected = cmdDelete.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("User successfully deleted and their projects were reassigned!");
+
+                            button1.PerformClick();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: User could not be found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a user from the list to edit.");
+                return;
+            }
+
+            int selectedUserId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["UserId"].Value);
+
+            if (selectedUserId == 8)
+            {
+                MessageBox.Show("Action Denied: You cannot edit the system 'deletedUser' account!", "Security Alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            EditUser editForm = new EditUser(selectedUserId);
+            editForm.ShowDialog();
+
+            button1.PerformClick();
         }
     }
 }
