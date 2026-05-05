@@ -55,7 +55,7 @@ namespace DIY_System
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Regex rule=new Regex(@"^[a-zA-Z0-9]+$");
+            Regex rule = new Regex(@"^[a-zA-Z0-9]+$");
             if (!rule.IsMatch(e.KeyChar.ToString()) && !char.IsControl(e.KeyChar))
             {
                 e.Handled = true;
@@ -121,6 +121,22 @@ namespace DIY_System
         {
             if (textBox1.Text != "" && textBox3.Text != "" && textBox4.Text != "")
             {
+
+                if (!string.IsNullOrWhiteSpace(textBox3.Text))
+                {
+                    Regex emailRule = new Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+                    if (!emailRule.IsMatch(textBox3.Text))
+                    {
+                        MessageBox.Show("Please enter a valid email address.", "Invalid Format", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        textBox3.Focus();
+
+                        return;
+                    }
+                }
+
+
                 if (checkUserName(sender, e) == true)
                 {
                     return;
@@ -161,6 +177,21 @@ namespace DIY_System
             {
                 MessageBox.Show("Please fill in all fields!");
             }
+        }
+
+        private void textBox3_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void Register_FormClosed(object sender, FormClosedEventArgs e)
+        { 
+
         }
     }
 }

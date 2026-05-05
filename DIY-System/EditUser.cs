@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,6 +25,20 @@ namespace DIY_System
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!string.IsNullOrWhiteSpace(textBox3.Text))
+            {
+                Regex emailRule = new Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+                if (!emailRule.IsMatch(textBox3.Text))
+                {
+                    MessageBox.Show("Please enter a valid email address.", "Invalid Format", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    textBox3.Focus();
+
+                    return;
+                }
+            }
+
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
                 sqlconnection.Open();
@@ -98,6 +113,11 @@ namespace DIY_System
                     }
                 }
             }
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
         }
     }
 }
