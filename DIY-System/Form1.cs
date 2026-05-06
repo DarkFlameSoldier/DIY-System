@@ -14,10 +14,6 @@ namespace DIY_System
 {
     public partial class Form1 : Form
     {
-        SqlConnection sqlconnection;
-        SqlCommand sqlcommand;
-        string query;
-        SqlDataAdapter sqladapter;
         string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Ivo\source\repos\DIY-System\DIY-System\DIY.mdf;Integrated Security=True";
         public Form1()
         {
@@ -45,7 +41,6 @@ namespace DIY_System
         {
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
-                // Change the SELECT statement to grab the RoleId!
                 string query = "SELECT UserId, RoleId FROM Users WHERE Username=@Username AND Password=@Password";
 
                 using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
@@ -59,10 +54,7 @@ namespace DIY_System
                     {
                         if (reader.Read())
                         {
-                            // Save both pieces of data globally!
                             CurrentUser.UserID = Convert.ToInt32(reader["UserId"]);
-
-                            // Grab the RoleId. If it's NULL for some reason, default to 1 (User)
                             CurrentUser.RoleID = reader["RoleId"] != DBNull.Value ? Convert.ToInt32(reader["RoleId"]) : 1;
 
                             return true;

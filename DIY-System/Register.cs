@@ -28,14 +28,6 @@ namespace DIY_System
             InitializeComponent();
         }
 
-        private void ClearData()
-        {
-            textBox1.Clear();
-            textBox3.Clear();
-            textBox4.Clear();
-            comboBox1.Text = "";
-        }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 

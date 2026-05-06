@@ -14,7 +14,6 @@ namespace DIY_System
 {
     public partial class AdminForm : Form
     {
-        DataView gridDataSource;
         SqlConnection sqlconnection;
         SqlCommand sqlcommand;
         string query;

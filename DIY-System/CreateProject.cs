@@ -14,7 +14,6 @@ namespace DIY_System
 {
     public partial class CreateProject : Form
     {
-        string query;
         string cs = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Ivo\source\repos\DIY-System\DIY-System\DIY.mdf;Integrated Security=True";
 
         string selectedPhotoPath = "";
@@ -31,8 +30,6 @@ namespace DIY_System
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 selectedPhotoPath = openFileDialog.FileName;
-
-
                 label6.Text = selectedPhotoPath;
             }
         }
