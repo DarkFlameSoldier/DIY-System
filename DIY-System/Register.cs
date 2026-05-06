@@ -75,6 +75,7 @@ namespace DIY_System
             sqladapter = new SqlDataAdapter(sqlcommand);
             DataTable dataTable = new DataTable();
             sqladapter.Fill(dataTable);
+
             if (dataTable.Rows.Count > 0)
             {
                 MessageBox.Show("Username already exists!");
