@@ -52,6 +52,9 @@ namespace DIY_System
             button7.Visible = false;
             button8.Visible = false;
             button9.Visible = false;
+
+            button11.Visible = false;
+            button12.Visible = false;
         }
 
         private void AdminForm_Load(object sender, EventArgs e)
@@ -61,7 +64,9 @@ namespace DIY_System
             button8.Visible = false;
             button9.Visible = false;
 
-
+            button11.Visible = false;
+            button12.Visible = false;
+            textBox1.Visible = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -70,6 +75,9 @@ namespace DIY_System
             button7.Visible = false;
             button8.Visible = false;
             button9.Visible = false;
+            textBox1.Visible = false;
+            button11.Visible = false;
+            button12.Visible = false;
 
             button3.Visible = true;
             button4.Visible = true;
@@ -109,6 +117,9 @@ namespace DIY_System
             button4.Visible = false;
             button5.Visible = false;
             button6.Visible = false;
+            button11.Visible = false;
+            button12.Visible = false;
+            textBox1.Visible = false;
 
             using (SqlConnection sqlconnection = new SqlConnection(cs))
             {
@@ -306,6 +317,138 @@ namespace DIY_System
             editForm.ShowDialog();
 
             button1.PerformClick();
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            button11.Visible = true;
+            button12.Visible = true;
+            textBox1.Visible = true;
+
+            button7.Visible = false;
+            button8.Visible = false;
+            button9.Visible = false;
+
+            button3.Visible = false;
+            button4.Visible = false;
+            button5.Visible = false;
+            button6.Visible = false;
+
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                string query = @"
+            SELECT 
+                CategoryId AS [Category Id],
+                Name AS [Category Name]
+            FROM Categories";
+
+                using (SqlCommand sqlcommand = new SqlCommand(query, sqlconnection))
+                {
+                    SqlDataAdapter sqladapter = new SqlDataAdapter(sqlcommand);
+                    DataTable datatable = new DataTable();
+
+                    sqladapter.Fill(datatable);
+
+                    dataGridView1.DataSource = null;
+                    dataGridView1.Columns.Clear();
+
+                    if (datatable.Rows.Count > 0)
+                    {
+                        dataGridView1.DataSource = datatable;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No normal users found in the database.");
+                    }
+                }
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            string newCategory = textBox1.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(newCategory))
+            {
+                MessageBox.Show("Please enter a category name.");
+                return;
+            }
+
+            using (SqlConnection sqlconnection = new SqlConnection(cs))
+            {
+                sqlconnection.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name";
+                using (SqlCommand cmdCheck = new SqlCommand(checkQuery, sqlconnection))
+                {
+                    cmdCheck.Parameters.AddWithValue("@Name", newCategory);
+                    int exists = Convert.ToInt32(cmdCheck.ExecuteScalar());
+
+                    if (exists > 0)
+                    {
+                        MessageBox.Show("This category already exists!");
+                        return;
+                    }
+                }
+
+                string insertQuery = "INSERT INTO Categories (Name) VALUES (@Name)";
+                using (SqlCommand cmdInsert = new SqlCommand(insertQuery, sqlconnection))
+                {
+                    cmdInsert.Parameters.AddWithValue("@Name", newCategory);
+                    cmdInsert.ExecuteNonQuery();
+
+                    MessageBox.Show("Category added successfully!");
+                    textBox1.Clear();
+
+                    button13.PerformClick();
+                }
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a category from the list to delete.");
+                return;
+            }
+
+            int categoryId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Category Id"].Value);
+            string categoryName = dataGridView1.CurrentRow.Cells["Category Name"].Value.ToString();
+
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete the category '{categoryName}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                using (SqlConnection sqlconnection = new SqlConnection(cs))
+                {
+                    sqlconnection.Open();
+
+                    string checkProjectsQuery = "SELECT COUNT(*) FROM Projects WHERE CategoryId = @CatId";
+                    using (SqlCommand cmdCheck = new SqlCommand(checkProjectsQuery, sqlconnection))
+                    {
+                        cmdCheck.Parameters.AddWithValue("@CatId", categoryId);
+                        int projectsCount = Convert.ToInt32(cmdCheck.ExecuteScalar());
+
+                        if (projectsCount > 0)
+                        {
+                            MessageBox.Show($"Cannot delete this category because it is currently used by {projectsCount} project(s). You must reassign or delete those projects first.", "Action Blocked", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+
+                    string deleteQuery = "DELETE FROM Categories WHERE CategoryId = @CatId";
+                    using (SqlCommand cmdDelete = new SqlCommand(deleteQuery, sqlconnection))
+                    {
+                        cmdDelete.Parameters.AddWithValue("@CatId", categoryId);
+                        cmdDelete.ExecuteNonQuery();
+
+                        MessageBox.Show("Category deleted successfully!");
+
+                        button13.PerformClick();
+                    }
+                }
+            }
         }
     }
 }
