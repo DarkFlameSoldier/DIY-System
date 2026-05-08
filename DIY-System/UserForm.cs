@@ -231,6 +231,9 @@ namespace DIY_System
         {
             AdminForm adminForm = new AdminForm();
             adminForm.ShowDialog();
+
+            DisplayData();
+            LoadCategories();
         }
 
         private void button8_Click(object sender, EventArgs e)
