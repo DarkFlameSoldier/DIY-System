@@ -44,6 +44,7 @@
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button14 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,6 +58,7 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(1169, 231);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // button2
             // 
@@ -164,7 +166,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(517, 105);
+            this.button11.Location = new System.Drawing.Point(517, 83);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(155, 34);
             this.button11.TabIndex = 13;
@@ -174,7 +176,7 @@
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(517, 155);
+            this.button12.Location = new System.Drawing.Point(517, 163);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(155, 34);
             this.button12.TabIndex = 14;
@@ -194,16 +196,27 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(517, 74);
+            this.textBox1.Location = new System.Drawing.Point(517, 52);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(155, 22);
             this.textBox1.TabIndex = 16;
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(517, 123);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(155, 34);
+            this.button14.TabIndex = 17;
+            this.button14.Text = "Edit Category";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
             // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1198, 507);
+            this.Controls.Add(this.button14);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
@@ -246,5 +259,6 @@
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button14;
     }
 }

@@ -66,6 +66,7 @@ namespace DIY_System
 
             button11.Visible = false;
             button12.Visible = false;
+            button14.Visible = false;
             textBox1.Visible = false;
         }
 
@@ -78,6 +79,7 @@ namespace DIY_System
             textBox1.Visible = false;
             button11.Visible = false;
             button12.Visible = false;
+            button14.Visible = false;
 
             button3.Visible = true;
             button4.Visible = true;
@@ -119,6 +121,7 @@ namespace DIY_System
             button6.Visible = false;
             button11.Visible = false;
             button12.Visible = false;
+            button14.Visible = false;
             textBox1.Visible = false;
 
             using (SqlConnection sqlconnection = new SqlConnection(cs))
@@ -323,6 +326,7 @@ namespace DIY_System
         {
             button11.Visible = true;
             button12.Visible = true;
+            button14.Visible = true;
             textBox1.Visible = true;
 
             button7.Visible = false;
@@ -447,6 +451,67 @@ namespace DIY_System
 
                         button13.PerformClick();
                     }
+                }
+            }
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow != null && dataGridView1.Columns.Contains("Category Name"))
+            {
+                if (dataGridView1.CurrentRow.Cells["Category Name"].Value != null)
+                {
+                    textBox1.Text = dataGridView1.CurrentRow.Cells["Category Name"].Value.ToString();
+                }
+            }
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a category to edit.");
+                return;
+            }
+
+            string updatedName = textBox1.Text.Trim();
+            if (string.IsNullOrWhiteSpace(updatedName))
+            {
+                MessageBox.Show("Category name cannot be empty.");
+                return;
+            }
+
+            int categoryId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Category Id"].Value);
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name AND CategoryId != @Id";
+                using (SqlCommand cmdCheck = new SqlCommand(checkQuery, con))
+                {
+                    cmdCheck.Parameters.AddWithValue("@Name", updatedName);
+                    cmdCheck.Parameters.AddWithValue("@Id", categoryId);
+                    int exists = Convert.ToInt32(cmdCheck.ExecuteScalar());
+
+                    if (exists > 0)
+                    {
+                        MessageBox.Show("Another category with this name already exists!");
+                        return;
+                    }
+                }
+
+                string updateQuery = "UPDATE Categories SET Name = @Name WHERE CategoryId = @Id";
+                using (SqlCommand cmdUpdate = new SqlCommand(updateQuery, con))
+                {
+                    cmdUpdate.Parameters.AddWithValue("@Name", updatedName);
+                    cmdUpdate.Parameters.AddWithValue("@Id", categoryId);
+
+                    cmdUpdate.ExecuteNonQuery();
+
+                    MessageBox.Show("Category updated successfully!");
+
+                    button13.PerformClick();   
                 }
             }
         }
